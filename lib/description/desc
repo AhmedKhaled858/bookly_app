@@ -1,0 +1,4 @@
+why after building models go to build remote data souce & local data source 
+becouse when we dont build it when fetch data the loading indecator will show every time when moving in app 
+and is be bad for user 
+we make remote and local to can store data and desplay it from local and fetch it not every time go away and return to page fetch data from first 
