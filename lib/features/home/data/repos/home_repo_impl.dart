@@ -13,20 +13,38 @@ class HomeRepoImpl extends HomeRepo {
   HomeRepoImpl({required this.homeLocalDataSource, required this.homeRemoteDataSource});
   @override
   Future<Either<Failure, List<BookEntity>>> fetchFeaturedBook() async {
+    List<BookEntity> booksList;
     try{
-      var booksList = homeLocalDataSource.fetchFeaturedBook();
+       booksList = homeLocalDataSource.fetchFeaturedBook();
       if(booksList.isNotEmpty){
-        return Future.value(right(booksList));
+       // return Future.value(right(booksList));
+       return right(booksList);
       }
-      var books = await homeRemoteDataSource.fetchFeaturedBook();
-      return Future.value(right(books));
+       booksList = await homeRemoteDataSource.fetchFeaturedBook();
+    //  return Future.value(right(books));
+        return right(booksList);
+    
     }catch(e){
-      return Future.value(left(Failure()));
+      //return Future.value(left(Failure()));
+      return left(ServerFailure());
     }
   }
   @override
-  Future<Either<Failure, List<BookEntity>>> fetchNewestBook() {
-    // TODO: implement fetchNewestBook
-    throw UnimplementedError();
+  Future<Either<Failure, List<BookEntity>>> fetchNewestBook()async {
+    List<BookEntity> newestBooksList;
+   try{
+       newestBooksList = homeLocalDataSource.fetchNewestBook();
+      if(newestBooksList.isNotEmpty){
+       // return Future.value(right(booksList));
+       return right(newestBooksList);
+      }
+       newestBooksList = await homeRemoteDataSource.fetchNewestBook();
+    //  return Future.value(right(books));
+        return right(newestBooksList);
+
+    }catch(e){
+      //return Future.value(left(Failure()));
+      return left(Failure());
+    }
   }
   }
