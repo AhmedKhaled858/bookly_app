@@ -4,6 +4,7 @@ import 'package:bookly_app/features/home/data/data_sources/home_remote_data_sour
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 import 'package:bookly_app/features/home/domain/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 // this class is responsible for implementing the HomeRepo interface
 class HomeRepoImpl extends HomeRepo {
@@ -26,7 +27,12 @@ class HomeRepoImpl extends HomeRepo {
     
     }catch(e){
       //return Future.value(left(Failure()));
-      return left(ServerFailure());
+      if(e is DioError){
+        return left(ServerFailure.fromDiorError(e));
+      }
+      else{
+        return left(ServerFailure(e.toString()));
+      }
     }
   }
   @override
@@ -44,7 +50,12 @@ class HomeRepoImpl extends HomeRepo {
 
     }catch(e){
       //return Future.value(left(Failure()));
-      return left(Failure());
+      if(e is DioError){
+        return left(ServerFailure.fromDiorError(e));
+      }
+      else{
+        return left(ServerFailure(e.toString()));
+      }
     }
   }
   }
