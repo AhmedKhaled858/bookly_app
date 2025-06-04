@@ -27,7 +27,7 @@ class HomeRepoImpl extends HomeRepo {
     
     }catch(e){
       //return Future.value(left(Failure()));
-      if(e is DioError){
+      if(e is DioException){
         return left(ServerFailure.fromDiorError(e));
       }
       else{
@@ -50,7 +50,7 @@ class HomeRepoImpl extends HomeRepo {
 
     }catch(e){
       //return Future.value(left(Failure()));
-      if(e is DioError){
+      if(e is DioException){
         return left(ServerFailure.fromDiorError(e));
       }
       else{

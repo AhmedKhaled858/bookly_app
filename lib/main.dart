@@ -4,12 +4,13 @@ import 'package:bookly_app/core/utils/simple_bloc_observer.dart';
 import 'package:bookly_app/features/home/data/repos/home_repo_impl.dart';
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 import 'package:bookly_app/features/home/domain/usecase/fetch_featured_book_use_case.dart';
+import 'package:bookly_app/features/home/domain/usecase/fetch_newest_book_use_case.dart';
 import 'package:bookly_app/features/home/presentation/manager/featured_book_cubit/featured_books_cubit.dart';
+import 'package:bookly_app/features/home/presentation/manager/newest_books_cubit/newest_books_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'core/utils/functions/setup_service_locator.dart';
 
 void main() async {
@@ -34,14 +35,14 @@ class BooklyApp extends StatelessWidget {
             FetchFeaturedBookUseCase(
               getIt.get<HomeRepoImpl>(),
             ),
-          );
+          )..fetchFeaturedBooks();
         },),
         BlocProvider(create: (context) {
-          return FeaturedBooksCubit(
-            FetchFeaturedBookUseCase(
+          return NewestBooksCubit(
+            FetchNewestBookUseCase(
               getIt.get<HomeRepoImpl>(),
             ),
-          );
+          )..fetchNewestBooks();
         }),
       ],
       child: MaterialApp.router(
