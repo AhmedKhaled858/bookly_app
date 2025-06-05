@@ -1,5 +1,4 @@
 import 'package:bookly_app/core/utils/app_router.dart';
-import 'package:bookly_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,7 +38,15 @@ class _SplashViewBodyState extends State<SplashViewBody>
       children: [
         SlideTransition(
           position: _logoAnimation,
-          child: Image.asset(AssetsData.logo),
+          //child: Image.asset(AssetsData.bookly),
+          child: Text("Bookly",
+          textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              //color: Colors.black,
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         SlideTransition(

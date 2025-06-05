@@ -1,12 +1,17 @@
 import 'package:bookly_app/constants.dart';
+import 'package:bookly_app/core/theme/theme_data_enum.dart';
+import 'package:bookly_app/core/theme/theme_state.dart';
 import 'package:bookly_app/core/utils/app_router.dart';
+import 'package:bookly_app/core/utils/assets.dart' show AssetsData;
 import 'package:bookly_app/core/utils/simple_bloc_observer.dart';
 import 'package:bookly_app/features/home/data/repos/home_repo_impl.dart';
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 import 'package:bookly_app/features/home/domain/usecase/fetch_featured_book_use_case.dart';
 import 'package:bookly_app/features/home/domain/usecase/fetch_newest_book_use_case.dart';
+import 'package:bookly_app/features/home/domain/usecase/toggle_theme_use_case.dart';
 import 'package:bookly_app/features/home/presentation/manager/featured_book_cubit/featured_books_cubit.dart';
 import 'package:bookly_app/features/home/presentation/manager/newest_books_cubit/newest_books_cubit.dart';
+import 'package:bookly_app/features/home/presentation/manager/theme_cubit/theme_cubit_dart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,9 +25,13 @@ void main() async {
     await Hive.openBox<BookEntity>(kFeaturedBox);
     await Hive.openBox<BookEntity>(kNewestBox);
     Bloc.observer = SimpleBlocObserver();
-  runApp(const BooklyApp());
+  runApp(
+    BlocProvider(
+      create: (_) => ThemeCubit(ToggleThemeUseCase()),
+      child: const BooklyApp(),
+    ),
+  );
 }
-
 class BooklyApp extends StatelessWidget {
   const BooklyApp({super.key});
 
@@ -36,7 +45,7 @@ class BooklyApp extends StatelessWidget {
               getIt.get<HomeRepoImpl>(),
             ),
           )..fetchFeaturedBooks();
-        },),
+        }),
         BlocProvider(create: (context) {
           return NewestBooksCubit(
             FetchNewestBookUseCase(
@@ -45,15 +54,46 @@ class BooklyApp extends StatelessWidget {
           )..fetchNewestBooks();
         }),
       ],
-      child: MaterialApp.router(
-        routerConfig: AppRouter.router,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: kPrimaryColor,
-          textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
-        ),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          final isDark = state.mode == AppThemeMode.dark;
+
+          return MaterialApp.router(
+            routerConfig: AppRouter.router,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData.light().copyWith(
+              textTheme: GoogleFonts.montserratTextTheme(
+                ThemeData.light().textTheme,
+              ),
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              textTheme: GoogleFonts.montserratTextTheme(
+                ThemeData.dark().textTheme,
+              ),
+            ),
+            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          builder: (context, child) {
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  AssetsData.backGround1,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              if (isDark)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.6), // dark overlay for dark mode
+                  ),
+                ),
+              child ?? const SizedBox(),
+            ],
+          );
+        },
+          );
+        },
       ),
     );
   }
 }
-
