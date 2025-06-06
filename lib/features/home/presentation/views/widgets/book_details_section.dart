@@ -14,7 +14,7 @@ class BookDetailsSection extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: width * .25),
-          child: const CustomBookImage(),
+          child:  CustomBookImage(imageUrl: '',),
         ),
         const SizedBox(height: 25),
         const Text("The JUDGE Book", style: Styles.textStyle30),
