@@ -12,17 +12,33 @@ abstract class HomeRemoteDataSource {
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   final ApiService apiService;
   HomeRemoteDataSourceImpl(this.apiService);
+
   @override
-  Future<List<BookEntity>> fetchFeaturedBook()async {
-   var data= await apiService.get(endPoint: 'volumes?Filtering=free-ebooks&q=subject:programming');
+Future<List<BookEntity>> fetchFeaturedBook() async {
+  try {
+    print('➡️ Starting fetchFeaturedBook');
+    var data = await apiService.get(endPoint:'volumes?q=programming&fillter=free_ebooks');
+    print('✅ API response received: $data');
+
+    if (data['items'] == null) {
+      throw Exception('❌ No "items" key found in API response');
+    }
+
     List<BookEntity> books = getBookList(data);
+    print('✅ Parsed ${books.length} books');
     saveBooksData(books, kFeaturedBox);
     return books;
+  } catch (e, stackTrace) {
+    print('❌ fetchFeaturedBook error: $e');
+    print('🪵 StackTrace: $stackTrace');
+    rethrow; // Let the repository catch and wrap this error
   }
+}
+
 
   @override
   Future<List<BookEntity>> fetchNewestBook()async {
-     var data= await apiService.get(endPoint: 'volumes?filtering=free-ebooks&q=programming&Sorting=newest');
+     var data= await apiService.get(endPoint: 'volumes?q=programming&Sorting=newest');
     List<BookEntity> books = getBookList(data);
     saveBooksData(books, kNewestBox);
     return books;
@@ -30,11 +46,23 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   }  
 
   List<BookEntity> getBookList(Map<String, dynamic> data) {
-     List<BookEntity> books = [];
-    for (var item in data['items']) {
-      books.add(BookModel.fromJson(item));
-    }
+  List<BookEntity> books = [];
+  if (data['items'] == null) {
+    print('⚠️ No items to parse in getBookList');
     return books;
   }
+
+  for (var item in data['items']) {
+    try {
+      books.add(BookModel.fromJson(item));
+    } catch (e) {
+      print('❌ Error parsing item: $e');
+    }
+  }
+
+  return books;
+}
+
+
 
 }
