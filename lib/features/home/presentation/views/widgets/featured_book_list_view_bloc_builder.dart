@@ -3,20 +3,31 @@ import 'package:bookly_app/features/home/presentation/views/widgets/custom_list_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FeaturedBookListViewBlocBuilder extends StatelessWidget {
+import '../../../domain/entities/book_entity.dart';
+
+class FeaturedBookListViewBlocBuilder extends StatefulWidget {
   const FeaturedBookListViewBlocBuilder({super.key});
 
   @override
+  State<FeaturedBookListViewBlocBuilder> createState() => _FeaturedBookListViewBlocBuilderState();
+}
+
+class _FeaturedBookListViewBlocBuilderState extends State<FeaturedBookListViewBlocBuilder> {
+  List<BookEntity> books = [];
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeaturedBooksCubit, FeaturedBooksState>(
+    return BlocConsumer<FeaturedBooksCubit, FeaturedBooksState>(
+      listener: (context, state) {
+        if (state is FeaturedBooksSuccess) {
+          books.addAll(state.books);
+        }
+      },
       builder: (context, state) {
         if (state is FeaturedBooksLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is FeaturedBooksSuccess) {
-          if (state.books.isEmpty) {
-            return const Center(child: Text('No featured books available.'));
-          }
-          return FeaturedBooksListView(books: state.books);
+        } else if (state is FeaturedBooksSuccess || state is FeaturedBooksPaginationLoading) {
+          return FeaturedBooksListView(books: books);
+
         } else if (state is FeaturedBooksFailure) {
           print('Error: ${state.errorMessage}');
           print(state.toString());
