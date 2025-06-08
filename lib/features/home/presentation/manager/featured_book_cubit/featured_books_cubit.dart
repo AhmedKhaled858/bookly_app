@@ -11,6 +11,7 @@ class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
   final FetchFeaturedBookUseCase fetchFeaturedBookUseCase;
 
   Future<void> fetchFeaturedBooks({int pageNumber = 0}) async {
+    
     if (pageNumber == 0) {
       emit(FeaturedBooksLoading());
     } else {
@@ -19,7 +20,11 @@ class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
 }
     var result = await fetchFeaturedBookUseCase.call(pageNumber);
     result.fold(
-      (failure) => emit(FeaturedBooksFailure(failure.message)),
+      (failure) { if(pageNumber==0){
+        emit(FeaturedBooksFailure(failure.message));
+      }else{
+        emit(FeaturedBooksPaginationFailure(failure.message));
+      }},
       (books) => emit(FeaturedBooksSuccess(books)),
     );
   }
