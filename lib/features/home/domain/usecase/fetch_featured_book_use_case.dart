@@ -11,13 +11,15 @@ import '../../../../core/use_case/use_case.dart';
 // and we use this step to make the permssion check to can fetch data or navigate him to another page 
 //! we make handling for my code 
 
-class FetchFeaturedBookUseCase extends UseCase<List <BookEntity>,NoParam>{
+class FetchFeaturedBookUseCase extends UseCase<List <BookEntity>,int>{
  final HomeRepo homeRepo;
  
   FetchFeaturedBookUseCase(this.homeRepo);
   
   @override
-  Future<Either<Failure, List<BookEntity>>> call([NoParam? param])async {
-  return await homeRepo.fetchFeaturedBook();
+  Future<Either<Failure, List<BookEntity>>> call([int pageNumber=0])async {
+  return await homeRepo.fetchFeaturedBook(
+    pageNumber: pageNumber,
+  );
   }
 }

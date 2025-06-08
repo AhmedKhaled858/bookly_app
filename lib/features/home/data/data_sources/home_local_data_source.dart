@@ -7,17 +7,24 @@ import 'package:hive/hive.dart';
 //because we don't fetch data from internet we get it from cashed data
 
 abstract class HomeLocalDataSource {
-  List<BookEntity> fetchFeaturedBook();
+  List<BookEntity> fetchFeaturedBook({int pageNumber = 0});
   List<BookEntity> fetchNewestBook();
 }
 class HomeLocalDataSourceImpl extends HomeLocalDataSource {
   @override
-  List<BookEntity> fetchFeaturedBook() {
+  List<BookEntity> fetchFeaturedBook({int pageNumber = 0}) {
+    int startIndex = pageNumber * 10;
+    int endIndex = startIndex + 10;
+
     var box = Hive.box<BookEntity>(kFeaturedBox);
-    return box.values.toList();
+    int length =box.values.length;
+    if(startIndex >=length|| endIndex >length) {
+      return [];
+    }
+    return box.values.toList().sublist(startIndex,endIndex );
     
   }
-
+  
   @override
   List<BookEntity> fetchNewestBook() {
     var box = Hive.box<BookEntity>(kNewestBox);

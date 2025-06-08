@@ -5,7 +5,7 @@ import 'package:bookly_app/features/home/data/models/book_model/book_model.dart'
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 
 abstract class HomeRemoteDataSource {
-  Future<List<BookEntity>> fetchFeaturedBook();
+  Future<List<BookEntity>> fetchFeaturedBook({int pageNumber = 0});
   Future<List<BookEntity>> fetchNewestBook();
 }
 
@@ -14,27 +14,33 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   HomeRemoteDataSourceImpl(this.apiService);
 
   @override
-Future<List<BookEntity>> fetchFeaturedBook() async {
+  Future<List<BookEntity>> fetchFeaturedBook({int pageNumber = 0}) async {
   try {
-    print('➡️ Starting fetchFeaturedBook');
-    var data = await apiService.get(endPoint:'volumes?q=programming&fillter=free_ebooks');
-    print('✅ API response received: $data');
-
+    var data = await apiService.get(endPoint: 'volumes?q=programming&startIndex=${pageNumber * 10}');
     if (data['items'] == null) {
-      throw Exception('❌ No "items" key found in API response');
+      throw Exception('No items found in API response');
     }
 
-    List<BookEntity> books = getBookList(data);
-    print('✅ Parsed ${books.length} books');
+    List<BookEntity> books = [];
+
+    for (var item in data['items']) {
+      try {
+        books.add(BookModel.fromJson(item));
+      } catch (e) {
+        print('❌ Skipping invalid book: $e');
+      }
+    }
+
+    print('✅ Total fetched books: ${data['items'].length}');
+    print('✅ Total successfully parsed books: ${books.length}');
+
     saveBooksData(books, kFeaturedBox);
     return books;
-  } catch (e, stackTrace) {
-    print('❌ fetchFeaturedBook error: $e');
-    print('🪵 StackTrace: $stackTrace');
-    rethrow; // Let the repository catch and wrap this error
+  } catch (e) {
+    print('fetchFeaturedBook error: $e');
+    rethrow;
   }
 }
-
 
   @override
   Future<List<BookEntity>> fetchNewestBook()async {
@@ -47,22 +53,21 @@ Future<List<BookEntity>> fetchFeaturedBook() async {
 
   List<BookEntity> getBookList(Map<String, dynamic> data) {
   List<BookEntity> books = [];
-  if (data['items'] == null) {
-    print('⚠️ No items to parse in getBookList');
-    return books;
-  }
+
+  if (data['items'] == null) return books;
 
   for (var item in data['items']) {
     try {
-      books.add(BookModel.fromJson(item));
+      final book = BookModel.fromJson(item);
+      books.add(book);
     } catch (e) {
-      print('❌ Error parsing item: $e');
+      print('❌ Skipped invalid book item due to error: $e');
+      print('🪵 Item data: $item');
     }
   }
 
   return books;
 }
-
 
 
 }
