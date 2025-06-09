@@ -1,8 +1,8 @@
 import 'package:bookly_app/features/home/presentation/manager/featured_book_cubit/featured_books_cubit.dart';
 import 'package:bookly_app/features/home/presentation/views/widgets/custom_list_view.dart';
+import 'package:bookly_app/features/home/presentation/views/widgets/featured_book_list_view_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../core/utils/widgets/build_error_show_snack_bar.dart';
 import '../../../domain/entities/book_entity.dart';
 
@@ -24,12 +24,13 @@ class _FeaturedBookListViewBlocConsumerState extends State<FeaturedBookListViewB
         if (state is FeaturedBooksSuccess) {
           books.addAll(state.books);
         } else if (state is FeaturedBooksPaginationFailure) {
-          buildErrorSnackBar(context, state);
+          ScaffoldMessenger.of(context)
+          .showSnackBar(buildErrorSnackBar(state.errorMessage));
         }
       },
       builder: (context, state) {
-        if (state is FeaturedBooksLoading) {
-          return const Center(child: CircularProgressIndicator());
+         if (state is FeaturedBooksLoading && books.isEmpty) {
+          return const Center(child: FeaturedBookListViewLoadingIndicator());
         } else if (state is FeaturedBooksSuccess ||
             state is FeaturedBooksPaginationLoading ||
             state is FeaturedBooksPaginationFailure) {
@@ -38,7 +39,7 @@ class _FeaturedBookListViewBlocConsumerState extends State<FeaturedBookListViewB
         } else if (state is FeaturedBooksFailure) {
           return Center(child: Text(state.errorMessage));
         } else {
-          return const Center(child: Text('Unexpected state'));
+          return const Center(child: FeaturedBookListViewLoadingIndicator());
         }
       },
     );
