@@ -36,10 +36,9 @@ class _NewestBookListViewBlocConsumerState extends State<NewestBookListViewBlocC
             state is NewestBooksPaginationFailure) {
           // Always return the list with current books
           return 
-          Expanded(
-            child: NewestBookListView(books: books),
+          NewestBookListView(
+            books: books,
           );
-
         } else if (state is NewestBooksFailure) {
           return Center(child: Text(state.errorMessage));
         } else {
