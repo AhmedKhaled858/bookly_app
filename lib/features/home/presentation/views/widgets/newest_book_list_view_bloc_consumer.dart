@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/widgets/build_error_show_snack_bar.dart';
 import '../../../domain/entities/book_entity.dart';
 import '../../manager/newest_books_cubit/newest_books_cubit.dart';
+import 'newest_book_list_view_loading_indicator.dart';
 
 class NewestBookListViewBlocConsumer extends StatefulWidget {
   const NewestBookListViewBlocConsumer({super.key});
@@ -27,23 +28,18 @@ class _NewestBookListViewBlocConsumerState extends State<NewestBookListViewBlocC
           .showSnackBar(buildErrorSnackBar(state.errorMessage));
         }
       },
-      builder: (context, state) {
+     builder: (context, state) {
          if (state is NewestBooksLoading && books.isEmpty) {
-          //return const Center(child: FeaturedBookListViewLoadingIndicator());
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: NewestBookListViewLoadingIndicator());
         } else if (state is NewestBooksSuccess ||
             state is NewestBooksPaginationLoading ||
             state is NewestBooksPaginationFailure) {
           // Always return the list with current books
-          return 
-          NewestBookListView(
-            books: books,
-          );
+          return NewestBookListView(books: books);
         } else if (state is NewestBooksFailure) {
           return Center(child: Text(state.errorMessage));
         } else {
-        //  return const Center(child: FeaturedBookListViewLoadingIndicator());
-          return const Center(child:Text("error"));
+          return const Center(child: NewestBookListViewLoadingIndicator());
         }
       },
     );
