@@ -3,25 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BookRating extends StatelessWidget {
+  final MainAxisAlignment mainAxisAlignment;
+  final num rating;
+  //final int count;
+
   const BookRating({
     super.key,
+    required this.rating,
+ //   required this.count,
     this.mainAxisAlignment = MainAxisAlignment.start,
   });
-  final MainAxisAlignment mainAxisAlignment;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
-
       children: [
-        Icon(FontAwesomeIcons.solidStar, color: Color(0xffFFDD4F), size: 19),
-        SizedBox(width: 10),
+        const Icon(FontAwesomeIcons.solidStar, color: Color(0xffFFDD4F), size: 19),
+        const SizedBox(width: 10),
         Text(
-          '4.8',
+          rating.toStringAsFixed(1),
           style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 5),
-        Opacity(opacity: .5, child: Text('(245)', style: Styles.textStyle16)),
+        // Opacity(
+        //   opacity: .5,
+        //   child: Text('($count)', style: Styles.textStyle16),
+        // ),
       ],
     );
   }

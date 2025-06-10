@@ -1,5 +1,5 @@
 import 'package:bookly_app/core/utils/styles.dart';
-import 'package:bookly_app/features/home/presentation/views/widgets/best_seller_listview.dart';
+import 'package:bookly_app/features/home/presentation/views/widgets/newest_book_list_view_bloc_consumer.dart';
 import 'package:bookly_app/features/home/presentation/views/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +25,7 @@ class HomeViewBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Text(
-                  "Best Seller",
+                  "Newest Book",
                   style: Styles.textStyle18.copyWith(
                     fontWeight: FontWeight.w900,
                     // fontFamily: kGTSectraFine
@@ -33,13 +33,14 @@ class HomeViewBody extends StatelessWidget {
                 ),
               ),
 
-              //  Padding(
-              //    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
-              //    child: BestSellerListViewItem(),
+               Padding(
+                 padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+                 child: NewestBookListViewBlocConsumer(),
+               ),
             ],
           ),
         ),
-        SliverToBoxAdapter(child: BestSellerListView()),
+       // SliverToBoxAdapter(child: BestSellerListViewBlocConsumer()),
       ],
     );
   }

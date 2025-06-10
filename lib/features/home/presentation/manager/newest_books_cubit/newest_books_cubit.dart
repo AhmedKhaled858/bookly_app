@@ -4,16 +4,34 @@ import 'package:bookly_app/features/home/domain/usecase/fetch_newest_book_use_ca
 import 'package:meta/meta.dart';
 
 part 'newest_books_state.dart';
-
 class NewestBooksCubit extends Cubit<NewestBooksState> {
-  NewestBooksCubit(this.fetchNewestBookUseCase) : super(NewestBooksInitial());
   final FetchNewestBookUseCase fetchNewestBookUseCase;
-  Future<void> fetchNewestBooks() async {
-    emit(NewestBooksLoading());
-    var result = await fetchNewestBookUseCase.call();
+  List<BookEntity> _allBooks = [];
+
+  NewestBooksCubit(this.fetchNewestBookUseCase) : super(NewestBooksInitial());
+
+  Future<void> fetchNewestBooks({int pageNumber = 0}) async {
+    if (pageNumber == 0) {
+      emit(NewestBooksLoading());
+      _allBooks.clear(); // Reset when starting from scratch
+    } else {
+      emit(NewestBooksPaginationLoading());
+    }
+
+    final result = await fetchNewestBookUseCase.call(pageNumber);
+
     result.fold(
-      (failure) => emit(NewestBooksFailure(failure.message)),
-      (books) => emit(NewestBooksSuccess(books)),
+      (failure) {
+        if (pageNumber == 0) {
+          emit(NewestBooksFailure(failure.message));
+        } else {
+          emit(NewestBooksPaginationFailure(failure.message));
+        }
+      },
+      (books) {
+        _allBooks.addAll(books); // Accumulate books
+        emit(NewestBooksSuccess(List.from(_allBooks)));
+      },
     );
   }
 }

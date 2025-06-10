@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'package:bookly_app/constants.dart';
 import 'package:bookly_app/core/utils/api_service.dart';
 import 'package:bookly_app/core/utils/functions/save_books.dart';
@@ -6,7 +7,7 @@ import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 
 abstract class HomeRemoteDataSource {
   Future<List<BookEntity>> fetchFeaturedBook({int pageNumber = 0});
-  Future<List<BookEntity>> fetchNewestBook();
+  Future<List<BookEntity>> fetchNewestBook({int pageNumber = 0});
 }
 
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
@@ -43,8 +44,8 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
 }
 
   @override
-  Future<List<BookEntity>> fetchNewestBook()async {
-     var data= await apiService.get(endPoint: 'volumes?q=programming&Sorting=newest');
+  Future<List<BookEntity>> fetchNewestBook({int pageNumber = 0}) async {
+    var data = await apiService.get(endPoint: 'volumes?q=programming&Sorting=newest&startIndex=${pageNumber * 10}');
     List<BookEntity> books = getBookList(data);
     saveBooksData(books, kNewestBox);
     return books;

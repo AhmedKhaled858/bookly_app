@@ -5,10 +5,10 @@ class CustomFadingWidget extends StatefulWidget {
   final Duration duration;
 
   const CustomFadingWidget({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 500),
-  }) : super(key: key);
+  });
 
   @override
   _CustomFadingWidgetState createState() => _CustomFadingWidgetState();
@@ -17,7 +17,7 @@ class CustomFadingWidget extends StatefulWidget {
 class _CustomFadingWidgetState extends State<CustomFadingWidget> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
-  
+
   @override
   void initState() {
     super.initState();
@@ -27,9 +27,18 @@ class _CustomFadingWidgetState extends State<CustomFadingWidget> with SingleTick
     );
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
     _controller.addListener(() {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.stop();     // optional: stops repeating animation
+    _controller.dispose();  // ✅ required to avoid the ticker error
+    super.dispose();
   }
 
   @override
