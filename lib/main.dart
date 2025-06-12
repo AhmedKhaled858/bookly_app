@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/utils/functions/setup_service_locator.dart';
-import 'core/utils/widgets/background_wrapper.dart';
+import 'core/utils/widgets/background.dart';
 
 void main() async {
   setUpServiceLocator();
@@ -66,10 +66,7 @@ class BooklyApp extends StatelessWidget {
             theme: ThemeData.light().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
                 ThemeData.light().textTheme,
-              ).apply(
-                bodyColor: Colors.black,
-                displayColor: Colors.black,
-              ),
+              )
             ),
             darkTheme: ThemeData.dark().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
@@ -78,7 +75,8 @@ class BooklyApp extends StatelessWidget {
             ),
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
             builder: (context, child) {
-              return BackgroundWrapper(
+              return BackgroundContainer(
+                isDark: isDark,
                 child: child ?? const SizedBox(),
               );
             },

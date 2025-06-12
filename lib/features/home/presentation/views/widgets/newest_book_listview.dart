@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookly_app/core/utils/app_router.dart';
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
 import 'package:bookly_app/features/home/presentation/manager/newest_books_cubit/newest_books_cubit.dart';
@@ -18,12 +20,25 @@ class _NewestBookListViewState extends State<NewestBookListView> {
   final ScrollController _scrollController = ScrollController();
   bool _hasTriggered = false;
   int nextPage = 1;
+  late final StreamSubscription _cubitSubscription;
 
   @override
-  void initState() {
+   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+
+    // Listen for Cubit state to reset scroll trigger
+    _cubitSubscription = BlocProvider.of<NewestBooksCubit>(context).stream.listen((state) {
+      if (state is NewestBooksSuccess || state is NewestBooksFailure) {
+        if (mounted) {
+          setState(() {
+            _hasTriggered = false;
+          });
+        }
+      }
+    });
   }
+
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
@@ -38,6 +53,7 @@ class _NewestBookListViewState extends State<NewestBookListView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _cubitSubscription.cancel(); // Cancel stream subscription to avoid memory leaks
     super.dispose();
   }
 

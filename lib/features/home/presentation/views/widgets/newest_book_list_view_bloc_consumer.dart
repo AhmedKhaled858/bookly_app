@@ -25,9 +25,10 @@ class _NewestBookListViewBlocConsumerState extends State<NewestBookListViewBlocC
           books.addAll(state.books);
         } else if (state is NewestBooksPaginationFailure) {
           ScaffoldMessenger.of(context)
-          .showSnackBar(buildErrorSnackBar(state.errorMessage));
+              .showSnackBar(buildErrorSnackBar(state.errorMessage));
         }
       },
+
      builder: (context, state) {
          if (state is NewestBooksLoading && books.isEmpty) {
           return const Center(child: NewestBookListViewLoadingIndicator());
@@ -37,7 +38,7 @@ class _NewestBookListViewBlocConsumerState extends State<NewestBookListViewBlocC
           // Always return the list with current books
           return NewestBookListView(books: books);
         } else if (state is NewestBooksFailure) {
-          return Center(child: Text(state.errorMessage));
+          return buildErrorSnackBar(state.errorMessage);
         } else {
           return const Center(child: NewestBookListViewLoadingIndicator());
         }

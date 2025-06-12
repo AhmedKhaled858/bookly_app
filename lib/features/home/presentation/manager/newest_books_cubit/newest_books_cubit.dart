@@ -6,16 +6,15 @@ import 'package:meta/meta.dart';
 part 'newest_books_state.dart';
 class NewestBooksCubit extends Cubit<NewestBooksState> {
   final FetchNewestBookUseCase fetchNewestBookUseCase;
-  List<BookEntity> _allBooks = [];
 
   NewestBooksCubit(this.fetchNewestBookUseCase) : super(NewestBooksInitial());
 
   Future<void> fetchNewestBooks({int pageNumber = 0}) async {
     if (pageNumber == 0) {
       emit(NewestBooksLoading());
-      _allBooks.clear(); // Reset when starting from scratch
     } else {
       emit(NewestBooksPaginationLoading());
+      emit(NewestBooksLoading());
     }
 
     final result = await fetchNewestBookUseCase.call(pageNumber);
@@ -29,8 +28,7 @@ class NewestBooksCubit extends Cubit<NewestBooksState> {
         }
       },
       (books) {
-        _allBooks.addAll(books); // Accumulate books
-        emit(NewestBooksSuccess(List.from(_allBooks)));
+        emit(NewestBooksSuccess(books));
       },
     );
   }

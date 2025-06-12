@@ -6,10 +6,10 @@ class BackgroundContainer extends StatelessWidget {
   final bool isDark;
 
   const BackgroundContainer({
-    Key? key,
+    super.key,
     required this.child,
     required this.isDark,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +17,14 @@ class BackgroundContainer extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            AssetsData.backGround1,
+            isDark ? AssetsData.backGround1 : AssetsData.backGroundLight,
             fit: BoxFit.cover,
           ),
         ),
         if (isDark)
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withOpacity(0.1),
             ),
           ),
         child,

@@ -10,7 +10,7 @@ class NewestBookListViewLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomFadingWidget(
       child: SizedBox(
-                   height: MediaQuery.of(context).size.height * .8,
+        height: MediaQuery.of(context).size.height * .8,
         child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
