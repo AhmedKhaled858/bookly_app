@@ -6,4 +6,5 @@ class AssetsData {
   static const bookly='assets/images/bookly.png';
   static const backGround1="assets/images/an.png";
   static const backGround2="assets/images/dwn.jpg";
+  static const backGroundLight='assets/images/sky.jpg';
 }

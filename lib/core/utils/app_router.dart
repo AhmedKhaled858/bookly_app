@@ -12,20 +12,25 @@ abstract class AppRouter {
   static const KBookDetailsView = '/bookDetailsView';
   static const KSearchView = '/SearchView';
   static final router = GoRouter(
-    routes: [
-      GoRoute(
-        path: KSplashView,
-        builder: (context, state) => const SplashView(),
-      ),
-      GoRoute(path: KHomeView, builder: (context, state) => const HomeView()),
-      GoRoute(
-        path: KBookDetailsView,
-        builder: (context, state) => const BookDetailsView(),
-      ),
-      GoRoute(
-        path: KSearchView,
-        builder: (context, state) => const SearchView(),
-      ),
-    ],
-  );
+  initialLocation: KSplashView, // 👈 Force app to start at SplashView
+  routes: [
+    GoRoute(
+      path: KSplashView,
+      builder: (context, state) => const SplashView(),
+    ),
+    GoRoute(
+      path: KHomeView,
+      builder: (context, state) => const HomeView(),
+    ),
+    GoRoute(
+      path: KBookDetailsView,
+      builder: (context, state) => const BookDetailsView(),
+    ),
+    GoRoute(
+      path: KSearchView,
+      builder: (context, state) => const SearchView(),
+    ),
+  ],
+);
+
 }

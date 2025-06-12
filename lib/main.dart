@@ -2,7 +2,6 @@ import 'package:bookly_app/constants.dart';
 import 'package:bookly_app/core/theme/theme_data_enum.dart';
 import 'package:bookly_app/core/theme/theme_state.dart';
 import 'package:bookly_app/core/utils/app_router.dart';
-import 'package:bookly_app/core/utils/assets.dart' show AssetsData;
 import 'package:bookly_app/core/utils/simple_bloc_observer.dart';
 import 'package:bookly_app/features/home/data/repos/home_repo_impl.dart';
 import 'package:bookly_app/features/home/domain/entities/book_entity.dart';
@@ -17,14 +16,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/utils/functions/setup_service_locator.dart';
+import 'core/utils/widgets/background_wrapper.dart';
 
 void main() async {
   setUpServiceLocator();
-    await Hive.initFlutter();
-    Hive.registerAdapter(BookEntityAdapter());
-    await Hive.openBox<BookEntity>(kFeaturedBox);
-    await Hive.openBox<BookEntity>(kNewestBox);
-    Bloc.observer = SimpleBlocObserver();
+  await Hive.initFlutter();
+  Hive.registerAdapter(BookEntityAdapter());
+  await Hive.openBox<BookEntity>(kFeaturedBox);
+  await Hive.openBox<BookEntity>(kNewestBox);
+  Bloc.observer = SimpleBlocObserver();
+
   runApp(
     BlocProvider(
       create: (_) => ThemeCubit(ToggleThemeUseCase()),
@@ -32,6 +33,7 @@ void main() async {
     ),
   );
 }
+
 class BooklyApp extends StatelessWidget {
   const BooklyApp({super.key});
 
@@ -64,6 +66,9 @@ class BooklyApp extends StatelessWidget {
             theme: ThemeData.light().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
                 ThemeData.light().textTheme,
+              ).apply(
+                bodyColor: Colors.black,
+                displayColor: Colors.black,
               ),
             ),
             darkTheme: ThemeData.dark().copyWith(
@@ -72,25 +77,11 @@ class BooklyApp extends StatelessWidget {
               ),
             ),
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          builder: (context, child) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  AssetsData.backGround1,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              if (isDark)
-                Positioned.fill(
-                  child: Container(
-                    color: Colors.black.withOpacity(0.6), // dark overlay for dark mode
-                  ),
-                ),
-              child ?? const SizedBox(),
-            ],
-          );
-        },
+            builder: (context, child) {
+              return BackgroundWrapper(
+                child: child ?? const SizedBox(),
+              );
+            },
           );
         },
       ),

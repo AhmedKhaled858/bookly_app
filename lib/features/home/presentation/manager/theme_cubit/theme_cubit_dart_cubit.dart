@@ -13,7 +13,11 @@ class ThemeCubit extends Cubit<ThemeState> {
       : super(ThemeState(mode: AppThemeMode.light));
 
   void toggleTheme() {
-    final newMode = _toggleUseCase.toggleTheme(state.mode);
-    emit(state.copyWith(mode: newMode));
-  }
+  final newMode = state.mode == AppThemeMode.dark
+      ? AppThemeMode.light
+      : AppThemeMode.dark;
+  print('🌗 Switching to: $newMode');
+  emit(ThemeState(mode: newMode));
+}
+
 }
