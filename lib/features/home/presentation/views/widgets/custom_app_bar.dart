@@ -25,6 +25,7 @@ class CustomAppBar extends StatelessWidget {
                 },
                 icon: Icon(
                   isDark ? Icons.wb_sunny_outlined : Icons.nightlight_round,
+                  color: isDark ? Colors.white : Colors.black,
                   size: 24,
                 ),
               );
@@ -35,7 +36,13 @@ class CustomAppBar extends StatelessWidget {
             onPressed: () {
               GoRouter.of(context).push(AppRouter.KSearchView);
             },
-            icon: Icon(FontAwesomeIcons.magnifyingGlass, size: 24),
+            icon: Icon(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+              FontAwesomeIcons.magnifyingGlass,
+              size: 24,
+            ),
           ),
         ],
       ),
