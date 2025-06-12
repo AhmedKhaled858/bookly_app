@@ -16,15 +16,17 @@ class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
       emit(FeaturedBooksLoading());
     } else {
       emit(FeaturedBooksPaginationLoading());
-  emit(FeaturedBooksLoading());
+      emit(FeaturedBooksLoading());
 }
     var result = await fetchFeaturedBookUseCase.call(pageNumber);
     result.fold(
-      (failure) { if(pageNumber==0){
-        emit(FeaturedBooksFailure(failure.message));
-      }else{
-        emit(FeaturedBooksPaginationFailure(failure.message));
-      }},
+      (failure) {
+        if (pageNumber == 0) {
+          emit(FeaturedBooksFailure(failure.message));
+        } else {
+          emit(FeaturedBooksPaginationFailure(failure.message));
+        }
+      },
       (books) => emit(FeaturedBooksSuccess(books)),
     );
   }

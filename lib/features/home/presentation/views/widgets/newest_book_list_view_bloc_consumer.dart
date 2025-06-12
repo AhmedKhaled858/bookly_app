@@ -13,36 +13,62 @@ class NewestBookListViewBlocConsumer extends StatefulWidget {
   State<NewestBookListViewBlocConsumer> createState() =>
       _NewestBookListViewBlocConsumerState();
 }
-
 class _NewestBookListViewBlocConsumerState extends State<NewestBookListViewBlocConsumer> {
   List<BookEntity> books = [];
+  final ScrollController _scrollController = ScrollController();
+  int nextPage = 1;
+  bool _isFetching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+
+    if (!_isFetching && currentScroll >= maxScroll * 0.7) {
+      _isFetching = true;
+      BlocProvider.of<NewestBooksCubit>(context)
+          .fetchNewestBooks(pageNumber: nextPage++);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NewestBooksCubit, NewestBooksState>(
       listener: (context, state) {
         if (state is NewestBooksSuccess) {
-          books.addAll(state.books);
+          setState(() {
+            books.addAll(state.books);
+            _isFetching = false;
+          });
         } else if (state is NewestBooksPaginationFailure) {
+          _isFetching = false;
           ScaffoldMessenger.of(context)
               .showSnackBar(buildErrorSnackBar(state.errorMessage));
         }
       },
-
-     builder: (context, state) {
-         if (state is NewestBooksLoading && books.isEmpty) {
+      builder: (context, state) {
+        if (state is NewestBooksLoading && books.isEmpty) {
           return const Center(child: NewestBookListViewLoadingIndicator());
-        } else if (state is NewestBooksSuccess ||
-            state is NewestBooksPaginationLoading ||
-            state is NewestBooksPaginationFailure) {
-          // Always return the list with current books
-          return NewestBookListView(books: books);
-        } else if (state is NewestBooksFailure) {
-          return buildErrorSnackBar(state.errorMessage);
+        } else if (state is NewestBooksFailure && books.isEmpty) {
+          return Center(child: Text(state.errorMessage));
         } else {
-          return const Center(child: NewestBookListViewLoadingIndicator());
+          return NewestBookListView(
+            books: books,
+            scrollController: _scrollController,
+          );
         }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
