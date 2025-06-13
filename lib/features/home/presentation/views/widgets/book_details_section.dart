@@ -1,35 +1,43 @@
 import 'package:bookly_app/core/utils/styles.dart';
 import 'package:bookly_app/features/home/presentation/views/widgets/books_action.dart';
-import 'package:bookly_app/features/home/presentation/views/widgets/custom_book_item.dart';
 import 'package:flutter/material.dart';
-
+import '../../../domain/entities/book_entity.dart';
+import 'book_rating.dart';
+import 'custom_book_item.dart';
 class BookDetailsSection extends StatelessWidget {
-  const BookDetailsSection({super.key});
+  final BookEntity book;
+
+  const BookDetailsSection({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * .25),
-          child:  CustomBookImage(imageUrl: '',),
-        ),
-        const SizedBox(height: 25),
-        const Text("The JUDGE Book", style: Styles.textStyle30),
-        const SizedBox(height: 6),
-        Opacity(
-          opacity: .8,
-          child: Text(
-            "ROBERT DOWNEY JR",
-            style: Styles.textStyle18.copyWith(fontStyle: FontStyle.italic),
+    final imageH = MediaQuery.of(context).size.height * 0.5.toDouble();
+    return SafeArea(
+      child: Column(
+        children: [
+          SizedBox(height: imageH * 0.6, child: CustomBookImage(imageUrl: book.image ?? '',)),
+          const SizedBox(height: 15),
+          Text(
+            book.title ?? 'No Title',
+            style: Styles.textStyle30,
+            textAlign: TextAlign.center,
           ),
-        ),
-        const SizedBox(height: 10),
-       // const BookRating(mainAxisAlignment: MainAxisAlignment.center),
-        const SizedBox(height: 15),
-        const BookAction(),
-      ],
+          const SizedBox(height: 6),
+          Opacity(
+            opacity: .8,
+            child: Text(
+              book.autherName ?? 'Unknown Author',
+              style: Styles.textStyle18.copyWith(fontStyle: FontStyle.italic),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 10),
+          BookRating(mainAxisAlignment: MainAxisAlignment.center, rating: book.rating ?? 0.0,),
+          const SizedBox(height: 15),
+          BookAction(book: book,),
+        ],
+      ),
     );
   }
 }
+

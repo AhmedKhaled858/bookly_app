@@ -25,4 +25,32 @@ class BookEntity {
     required this.rating,
      required this.title,
      });
+
+
+  factory BookEntity.fromJson(Map<String, dynamic> json) {
+    return BookEntity(
+      bookId: json['id'],
+      title: json['title'],
+      autherName: json['autherName'],
+      price: json['price'].toDouble(),
+      image: json['image'],
+      rating: json['rating']?.toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': bookId,
+    'title': title,
+    'autherName': autherName,
+    'price': price,
+    'image': image,
+    'rating': rating,
+  };
+
+  // To avoid duplicate issues
+  @override
+  bool operator ==(Object other) => other is BookEntity && other.bookId == bookId;
+
+  @override
+  int get hashCode => bookId.hashCode;
 }

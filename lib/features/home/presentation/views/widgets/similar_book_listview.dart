@@ -1,20 +1,24 @@
-import 'package:bookly_app/features/home/presentation/views/widgets/custom_book_item.dart';
 import 'package:flutter/material.dart';
+import '../../../domain/entities/book_entity.dart';
+import 'custom_book_item.dart';
 
 class SimilarBookListView extends StatelessWidget {
-  const SimilarBookListView({super.key});
+  final List<BookEntity> books;
+
+  const SimilarBookListView({super.key, required this.books});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .18,
-      child: ListView.builder(
+      height: 120,
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (contex, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-            child: CustomBookImage(imageUrl: ''),
-          );
+        itemCount: books.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final book = books[index];
+          return CustomBookImage(imageUrl: book.image ?? '');
+
         },
       ),
     );

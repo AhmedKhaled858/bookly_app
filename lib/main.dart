@@ -15,8 +15,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'core/utils/functions/setup_service_locator.dart';
 import 'core/utils/widgets/background.dart';
+import 'features/home/presentation/manager/cart_provider.dart';
 
 void main() async {
   setUpServiceLocator();
@@ -27,9 +30,14 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
 
   runApp(
-    BlocProvider(
-      create: (_) => ThemeCubit(ToggleThemeUseCase()),
-      child: const BooklyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: BlocProvider(
+        create: (_) => ThemeCubit(ToggleThemeUseCase()),
+        child: const BooklyApp(),
+      ),
     ),
   );
 }
@@ -66,7 +74,7 @@ class BooklyApp extends StatelessWidget {
             theme: ThemeData.light().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
                 ThemeData.light().textTheme,
-              )
+              ),
             ),
             darkTheme: ThemeData.dark().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
