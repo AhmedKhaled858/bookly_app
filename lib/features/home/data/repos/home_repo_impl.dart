@@ -63,13 +63,26 @@ class HomeRepoImpl extends HomeRepo {
     }
   }
   
-  @override
-  Future<Either<Failure, BookEntity>> fetchBookDetails(String bookId) async {
+@override
+Future<Either<Failure, BookEntity>> fetchBookDetails(String bookId) async {
   try {
-    final book = await bookDetailsRemoteDataSource.fetchBookDetails(bookId);
-    return Right(book);
-  } catch (e) {
-    return Left(ServerFailure(e.toString()));
+    final books = await bookDetailsRemoteDataSource.fetchBookDetails(bookId);
+    if (books.isNotEmpty) {
+      print('Book details fetched successfully: ${books.first.title}');
+      return right(books.first);
+    } else {
+      return left(ServerFailure('No book found for the given ID'));
+    }
+  } 
+    catch (e) {
+    //return Future.value(left(Failure()));
+    if(e is DioException){
+      return left(ServerFailure.fromDiorError(e));
+    }
+    else{
+      return left(ServerFailure(e.toString()));
+    }
   }
 }
+
   }

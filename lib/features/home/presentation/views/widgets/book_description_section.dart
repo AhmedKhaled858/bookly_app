@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:bookly_app/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entities/book_entity.dart';
 
@@ -33,16 +36,18 @@ class BookDescriptionSection extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isDark
-                  ? Colors.white.withOpacity(0.1)
+                  ? Colors.white.withOpacity(0.01)
                   : Colors.black.withOpacity(0.05),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
+              
               cleanedText,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isDark ? Colors.white : Color(0xFF1A1A1A),
-                    height: 1.5,
-                  ),
+              style: Styles.textStyle16.copyWith(
+                color: isDark ? Colors.white : Color(0xFF1A1A1A),
+                height: 1.5,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],

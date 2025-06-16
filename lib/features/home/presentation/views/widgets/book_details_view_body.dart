@@ -5,6 +5,7 @@ import '../../../domain/entities/book_entity.dart';
 import 'book_details_section.dart';
 import 'custom_book_details_app_bar.dart';
 import 'book_description_section.dart';
+import 'custom_book_details_loading_indecator.dart';
 
 class BookDetailsViewBody extends StatefulWidget {
   final BookEntity book;
@@ -21,28 +22,27 @@ class _BookDetailsViewBodyState extends State<BookDetailsViewBody> {
     super.initState();
     context.read<BookDetailsCubit>().fetchBookDetails(widget.book.bookId, widget.book);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<BookDetailsCubit, BookDetailsState>(
-      builder: (context, state) {
-        if (state is BookDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is BookDetailsSuccess) {
-          final book = state.book;
-          return CustomScrollView(
-            slivers: [
-              const SliverToBoxAdapter(child: CustomBookDetailsAppBar()),
-              SliverToBoxAdapter(child: BookDetailsSection(book: book)),
-              const SliverToBoxAdapter(child: SizedBox(height: 20)),
-              SliverToBoxAdapter(child: BookDescriptionSection(book: book)),
-              const SliverToBoxAdapter(child: SizedBox(height: 15)),
-            ],
-          );
-        } else {
-          return const Center(child: Text("Something went wrong"));
-        }
-      },
-    );
-  }
+@override
+Widget build(BuildContext context) {
+  return BlocBuilder<BookDetailsCubit, BookDetailsState>(
+    builder: (context, state) {
+      if (state is BookDetailsLoading) {
+        return const BookDetailsLoadingIndicator(); // ← Custom UI here
+      } else if (state is BookDetailsSuccess) {
+        final book = state.book;
+        return CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(child: CustomBookDetailsAppBar()),
+            SliverToBoxAdapter(child: BookDetailsSection(book: book)),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
+            SliverToBoxAdapter(child: BookDescriptionSection(book: book)),
+            const SliverToBoxAdapter(child: SizedBox(height: 15)),
+          ],
+        );
+      } else {
+        return const Center(child: Text("Something went wrong"));
+      }
+    },
+  );
+}
 }

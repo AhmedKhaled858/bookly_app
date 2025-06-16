@@ -18,7 +18,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'core/utils/functions/service_locator.dart';
-import 'core/utils/functions/setup_service_locator.dart' hide getIt;
 import 'core/utils/widgets/background.dart';
 import 'features/home/presentation/manager/cart_provider.dart';
 
