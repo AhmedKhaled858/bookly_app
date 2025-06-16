@@ -17,12 +17,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'core/utils/functions/setup_service_locator.dart';
+import 'core/utils/functions/service_locator.dart';
+import 'core/utils/functions/setup_service_locator.dart' hide getIt;
 import 'core/utils/widgets/background.dart';
 import 'features/home/presentation/manager/cart_provider.dart';
 
 void main() async {
-  setUpServiceLocator();
+  setupServiceLocator();
   await Hive.initFlutter();
   Hive.registerAdapter(BookEntityAdapter());
   await Hive.openBox<BookEntity>(kFeaturedBox);
@@ -49,20 +50,24 @@ class BooklyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) {
-          return FeaturedBooksCubit(
-            FetchFeaturedBookUseCase(
-              getIt.get<HomeRepoImpl>(),
-            ),
-          )..fetchFeaturedBooks();
-        }),
-        BlocProvider(create: (context) {
-          return NewestBooksCubit(
-            FetchNewestBookUseCase(
-              getIt.get<HomeRepoImpl>(),
-            ),
-          )..fetchNewestBooks();
-        }),
+        BlocProvider(
+          create: (context) {
+            return FeaturedBooksCubit(
+              FetchFeaturedBookUseCase(
+                getIt.get<HomeRepoImpl>(),
+              ),
+            )..fetchFeaturedBooks();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return NewestBooksCubit(
+              FetchNewestBookUseCase(
+                getIt.get<HomeRepoImpl>(),
+              ),
+            )..fetchNewestBooks();
+          },
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
@@ -73,12 +78,18 @@ class BooklyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData.light().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
-                ThemeData.light().textTheme,
+                ThemeData.light().textTheme.apply(
+                      bodyColor: Colors.black87, // Light mode text color
+                      displayColor: Colors.black87,
+                    ),
               ),
             ),
             darkTheme: ThemeData.dark().copyWith(
               textTheme: GoogleFonts.montserratTextTheme(
-                ThemeData.dark().textTheme,
+                ThemeData.dark().textTheme.apply(
+                      bodyColor: Color(0xFFEEEEEE), // Custom light grey text
+                      displayColor: Color(0xFFEEEEEE),
+                    ),
               ),
             ),
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,

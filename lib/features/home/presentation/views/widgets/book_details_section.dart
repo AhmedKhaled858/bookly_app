@@ -18,7 +18,9 @@ class BookDetailsSection extends StatelessWidget {
           SizedBox(height: imageH * 0.6, child: CustomBookImage(imageUrl: book.image ?? '',)),
           const SizedBox(height: 15),
           Text(
-            book.title ?? 'No Title',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            book.title,
             style: Styles.textStyle30,
             textAlign: TextAlign.center,
           ),
@@ -26,6 +28,8 @@ class BookDetailsSection extends StatelessWidget {
           Opacity(
             opacity: .8,
             child: Text(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               book.autherName ?? 'Unknown Author',
               style: Styles.textStyle18.copyWith(fontStyle: FontStyle.italic),
               textAlign: TextAlign.center,

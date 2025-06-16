@@ -5,13 +5,15 @@ import 'package:bookly_app/features/home/domain/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' show DioException;
 import '../../../../core/error/failure.dart';
+import '../data_sources/home_details_data_source.dart';
 
 // this class is responsible for implementing the HomeRepo interface
 class HomeRepoImpl extends HomeRepo {
   final HomeLocalDataSource homeLocalDataSource;
   final HomeRemoteDataSource homeRemoteDataSource;
+  final BookDetailsRemoteDataSource bookDetailsRemoteDataSource;
 
-  HomeRepoImpl({required this.homeLocalDataSource, required this.homeRemoteDataSource});
+  HomeRepoImpl({required this.homeLocalDataSource, required this.homeRemoteDataSource, required this.bookDetailsRemoteDataSource});
   @override
   Future<Either<Failure, List<BookEntity>>> fetchFeaturedBook({int pageNumber = 0}) async {
     List<BookEntity> booksList;
@@ -60,4 +62,14 @@ class HomeRepoImpl extends HomeRepo {
       }
     }
   }
+  
+  @override
+  Future<Either<Failure, BookEntity>> fetchBookDetails(String bookId) async {
+  try {
+    final book = await bookDetailsRemoteDataSource.fetchBookDetails(bookId);
+    return Right(book);
+  } catch (e) {
+    return Left(ServerFailure(e.toString()));
+  }
+}
   }

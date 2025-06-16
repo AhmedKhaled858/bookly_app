@@ -17,14 +17,17 @@ class BookEntity {
   final num? price;
   @HiveField(5)
   final num? rating;
+  @HiveField(6)
+  final String? description;
   BookEntity({
     required this.bookId,
     required this.image,
     required this.autherName,
     required this.price,
     required this.rating,
-     required this.title,
-     });
+    required this.title,
+    required this.description,
+  });
 
 
   factory BookEntity.fromJson(Map<String, dynamic> json) {
@@ -35,6 +38,7 @@ class BookEntity {
       price: json['price'].toDouble(),
       image: json['image'],
       rating: json['rating']?.toDouble(),
+      description: json['description'],
     );
   }
 
@@ -45,6 +49,7 @@ class BookEntity {
     'price': price,
     'image': image,
     'rating': rating,
+    'description': description,
   };
 
   // To avoid duplicate issues

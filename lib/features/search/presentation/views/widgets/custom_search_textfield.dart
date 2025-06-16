@@ -9,26 +9,39 @@ class CustomSearchTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        enabledBorder: buildOutlLineInputBorder(),
-        focusedBorder: buildOutlLineInputBorder(),
+        enabledBorder: buildOutlLineInputBorder(context),
+        focusedBorder: buildOutlLineInputBorder(context),
         hintText: "Enter the book name",
-        hintStyle: Styles.textStyle14,
+        hintStyle: Styles.textStyle14.copyWith(
+          color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+        ),
         suffixIcon: IconButton(
           onPressed: () {},
           icon: Opacity(
             opacity: .7,
-            child: Icon(FontAwesomeIcons.magnifyingGlass, size: 24),
+            child: Icon(FontAwesomeIcons.magnifyingGlass, size: 24,
+            color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+            ),
           ),
         ),
         labelText: "Search",
-        labelStyle: Styles.textStyle14.copyWith(fontWeight: FontWeight.bold),
+        labelStyle: Styles.textStyle14.copyWith(fontWeight: FontWeight.bold,
+        color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,),
       ),
     );
   }
 
-  OutlineInputBorder buildOutlLineInputBorder() {
+  OutlineInputBorder buildOutlLineInputBorder(BuildContext context) {
     return OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
+      borderSide: BorderSide(color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,),
       borderRadius: BorderRadius.circular(16),
     );
   }
