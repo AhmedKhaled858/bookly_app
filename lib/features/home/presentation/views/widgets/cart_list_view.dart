@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +37,8 @@ class CartListView extends StatelessWidget {
                           )
                         : const Icon(Icons.book, color: Colors.white),
                     title: Text(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       book.title,
                       style: const TextStyle(color: Colors.white),
                     ),
