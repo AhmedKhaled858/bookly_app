@@ -1,6 +1,7 @@
 import 'package:bookly_app/core/utils/styles.dart';
 import 'package:bookly_app/features/home/presentation/views/widgets/books_action.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/colors/app_color.dart';
 import '../../../domain/entities/book_entity.dart';
 import 'book_rating.dart';
 import 'custom_book_item.dart';
@@ -12,6 +13,10 @@ class BookDetailsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageH = MediaQuery.of(context).size.height * 0.5.toDouble();
+     final ThemeData theme = Theme.of(context);
+    final Color textColor = theme.brightness == Brightness.dark 
+        ? AppColors.darkTextColor 
+        : AppColors.lightTextColor;
     return SafeArea(
       child: Column(
         children: [
@@ -31,7 +36,7 @@ class BookDetailsSection extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               book.autherName ?? 'Unknown Author',
-              style: Styles.textStyle18.copyWith(fontStyle: FontStyle.italic),
+              style: Styles.textStyle18.copyWith(color: textColor,fontStyle: FontStyle.italic),
               textAlign: TextAlign.center,
             ),
           ),

@@ -22,8 +22,8 @@ import 'core/utils/widgets/background.dart';
 import 'features/home/presentation/manager/cart_provider.dart';
 
 void main() async {
-  setupServiceLocator();
   await Hive.initFlutter();
+    setupServiceLocator();
   Hive.registerAdapter(BookEntityAdapter());
   await Hive.openBox<BookEntity>(kFeaturedBox);
   await Hive.openBox<BookEntity>(kNewestBox);

@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/models/book_model/book_model.dart'; // Make sure this exists
 import '../../domain/entities/book_entity.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -35,21 +35,21 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> _saveCart() async {
     final prefs = await SharedPreferences.getInstance();
-    final cartJson = jsonEncode(_cartBooks.map((b) => b.toJson()).toList());
+    final cartJson = jsonEncode(_cartBooks.map((b) => (b as BookModel).toJson()).toList());
     await prefs.setString('cart_books', cartJson);
   }
 
-Future<void> _loadCart() async {
-  final prefs = await SharedPreferences.getInstance();
-  final cartJson = prefs.getString('cart_books');
-  if (cartJson != null) {
-    final List<dynamic> jsonList = jsonDecode(cartJson);
-    _cartBooks.clear();
-    _cartBooks.addAll(jsonList.map((json) => BookEntity.fromJson(json)));
-    debugPrint('Loaded cart: ${_cartBooks.map((e) => e.title).toList()}');
-    notifyListeners();
-  } else {
-    debugPrint('No saved cart found');
+  Future<void> _loadCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cartJson = prefs.getString('cart_books');
+    if (cartJson != null) {
+      final List<dynamic> jsonList = jsonDecode(cartJson);
+      _cartBooks.clear();
+      _cartBooks.addAll(jsonList.map((json) => BookModel.fromJson(json)));
+      debugPrint('Loaded cart: ${_cartBooks.map((e) => e.title).toList()}');
+      notifyListeners();
+    } else {
+      debugPrint('No saved cart found');
+    }
   }
-}
 }

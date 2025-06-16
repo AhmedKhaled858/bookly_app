@@ -2,6 +2,7 @@
 
 import 'package:bookly_app/core/utils/styles.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/colors/app_color.dart';
 import '../../../domain/entities/book_entity.dart';
 
 class BookDescriptionSection extends StatelessWidget {
@@ -17,8 +18,10 @@ class BookDescriptionSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cleanedText = cleanDescription(book.description);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
+ final ThemeData theme = Theme.of(context);
+    final Color textColor = theme.brightness == Brightness.dark 
+        ? AppColors.darkTextColor 
+        : AppColors.lightTextColor;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -28,23 +31,21 @@ class BookDescriptionSection extends StatelessWidget {
             "Description",
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Color(0xFF1A1A1A),
+                  color: textColor,
                 ),
           ),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withOpacity(0.01)
-                  : Colors.black.withOpacity(0.05),
+              color: textColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               
               cleanedText,
               style: Styles.textStyle16.copyWith(
-                color: isDark ? Colors.white : Color(0xFF1A1A1A),
+                color: textColor,
                 height: 1.5,
                 fontWeight: FontWeight.w400,
               ),

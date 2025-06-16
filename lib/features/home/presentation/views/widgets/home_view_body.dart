@@ -3,6 +3,7 @@ import 'package:bookly_app/features/home/presentation/views/widgets/newest_book_
 import 'package:bookly_app/features/home/presentation/views/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/theme/colors/app_color.dart';
 import 'featured_book_list_view_bloc_consumer.dart';
 
 class HomeViewBody extends StatelessWidget {
@@ -10,6 +11,10 @@ class HomeViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final ThemeData theme = Theme.of(context);
+    final Color textColor = theme.brightness == Brightness.dark 
+        ? AppColors.darkTextColor 
+        : AppColors.lightTextColor;
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -27,7 +32,8 @@ class HomeViewBody extends StatelessWidget {
                 child: Text(
                   "Newest Book",
                   style: Styles.textStyle18.copyWith(
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.bold,
+                    color: textColor, // Apply dynamic text color
                     // fontFamily: kGTSectraFine
                   ),
                 ),
@@ -40,7 +46,6 @@ class HomeViewBody extends StatelessWidget {
             ],
           ),
         ),
-       // SliverToBoxAdapter(child: BestSellerListViewBlocConsumer()),
       ],
     );
   }
