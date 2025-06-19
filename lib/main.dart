@@ -76,6 +76,7 @@ class BooklyApp extends StatelessWidget {
             routerConfig: AppRouter.router,
             debugShowCheckedModeBanner: false,
             theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: const Color.fromARGB(59, 255, 255, 255),
               textTheme: GoogleFonts.montserratTextTheme(
                 ThemeData.light().textTheme.apply(
                       bodyColor: Colors.black87, // Light mode text color
@@ -84,6 +85,7 @@ class BooklyApp extends StatelessWidget {
               ),
             ),
             darkTheme: ThemeData.dark().copyWith(
+              scaffoldBackgroundColor: const Color.fromARGB(0, 18, 18, 18),
               textTheme: GoogleFonts.montserratTextTheme(
                 ThemeData.dark().textTheme.apply(
                       bodyColor: Color(0xFFEEEEEE), // Custom light grey text

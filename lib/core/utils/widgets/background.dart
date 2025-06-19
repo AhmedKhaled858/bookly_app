@@ -16,15 +16,23 @@ class BackgroundContainer extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: Image.asset(
-            isDark ? AssetsData.backGround1 : AssetsData.backGroundLight,
-            fit: BoxFit.cover,
-          ),
+          child: isDark
+              ? Image.asset(
+                  AssetsData.backGround1,
+                  fit: BoxFit.cover,
+                )
+              : Opacity(
+                  opacity: 0.8,
+                  child: Image.asset(
+                    AssetsData.backGroundLight,
+                    fit: BoxFit.cover,
+                  ),
+                ),
         ),
         if (isDark)
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withOpacity(0.5),
             ),
           ),
         child,

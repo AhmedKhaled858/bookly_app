@@ -1,8 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:bookly_app/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/theme/colors/app_color.dart';
 import '../../../domain/entities/book_entity.dart';
 import '../../manager/cart_provider.dart';
 
@@ -12,7 +14,10 @@ class CartListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartBooks = Provider.of<CartProvider>(context).cartBooks;
-
+        final ThemeData theme = Theme.of(context);
+    final Color textColor = theme.brightness == Brightness.dark 
+        ? AppColors.darkTextColor 
+        : AppColors.lightTextColor;
     return SafeArea(
       child: cartBooks.isEmpty
           ? const Center(child: Text("No books in cart"))
@@ -40,15 +45,17 @@ class CartListView extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       book.title,
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                      style: Styles.textStyle16.copyWith(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                    ),),
                     subtitle: Text(
                       book.autherName ?? 'Unknown Author',
-                      style: TextStyle(color: Colors.white.withOpacity(0.8)),
+                      style: Styles.textStyle14.copyWith(color: textColor),
                     ),
                     trailing: Text(
                       "${book.price}€",
-                      style: const TextStyle(color: Colors.white),
+                      style: Styles.textStyle14.copyWith(color: textColor),
                     ),
                   ),
                 );

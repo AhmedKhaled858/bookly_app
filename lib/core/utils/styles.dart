@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 abstract class Styles {
   static const textStyle18 = TextStyle(
     fontSize: 18,
-    // fontWeight: FontWeight.w600
+     fontWeight: FontWeight.w600,
+     fontFamily: kGTSectraFine
   );
   static const textStyle30 = TextStyle(
     fontSize: 30,

@@ -36,7 +36,7 @@ class BookDetailsSection extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               book.autherName ?? 'Unknown Author',
-              style: Styles.textStyle18.copyWith(color: textColor,fontStyle: FontStyle.italic),
+              style: Styles.textStyle18.copyWith(fontStyle: FontStyle.italic),
               textAlign: TextAlign.center,
             ),
           ),

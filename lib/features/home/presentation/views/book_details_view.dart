@@ -17,9 +17,8 @@ class BookDetailsView extends StatelessWidget {
     return BlocProvider(
       create: (_) => BookDetailsCubit(getIt.get<FetchBookDetailsUseCase>()),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         body: BookDetailsViewBody(
-          book: book[0], // Assuming you're always showing the first book
+          book: book[0], 
         ),
       ),
     );

@@ -40,7 +40,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
 );
 
 ThemeData lightTheme = ThemeData.light().copyWith(
-  scaffoldBackgroundColor: AppColors.lightBackground,
+  scaffoldBackgroundColor: const Color.fromARGB(49, 245, 245, 245),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
       color: AppColors.lightTextColor, 

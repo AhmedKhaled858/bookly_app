@@ -32,9 +32,7 @@ class HomeViewBody extends StatelessWidget {
                 child: Text(
                   "Newest Book",
                   style: Styles.textStyle18.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: textColor, // Apply dynamic text color
-                    // fontFamily: kGTSectraFine
+                    color: textColor,
                   ),
                 ),
               ),
