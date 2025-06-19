@@ -1,6 +1,7 @@
 import 'package:bookly_app/core/theme/theme_data_enum.dart';
 import 'package:bookly_app/core/theme/theme_state.dart';
 import 'package:bookly_app/core/utils/app_router.dart';
+import 'package:bookly_app/core/utils/widgets/custom_cart_icon.dart';
 import 'package:bookly_app/features/home/presentation/manager/theme_cubit/theme_cubit_dart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,7 @@ class CustomAppBar extends StatelessWidget {
               size: 24,
             ),
           ),
+          CustomCartIcon(),
         ],
       ),
     );
