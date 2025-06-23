@@ -28,7 +28,7 @@ class _FeaturedBookListViewBlocConsumerState extends State<FeaturedBookListViewB
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-
+    // to start fetching more books when the user scrolls to 70% of the list
     if (!_isFetching && currentScroll >= maxScroll * 0.7) {
       _isFetching = true;
       BlocProvider.of<FeaturedBooksCubit>(context).fetchFeaturedBooks(pageNumber: nextPage++);

@@ -16,31 +16,14 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
 
   @override
   Future<List<BookEntity>> fetchFeaturedBook({int pageNumber = 0}) async {
-  try {
+
     var data = await apiService.get(endPoint: 'volumes?q=programming&startIndex=${pageNumber * 10}');
     if (data['items'] == null) {
       throw Exception('No items found in API response');
     }
-
-    List<BookEntity> books = [];
-
-    for (var item in data['items']) {
-      try {
-        books.add(BookModel.fromJson(item));
-      } catch (e) {
-        print('❌ Skipping invalid book: $e');
-      }
-    }
-
-    print('✅ Total fetched books: ${data['items'].length}');
-    print('✅ Total successfully parsed books: ${books.length}');
-
+    List<BookEntity> books = getBookList(data);
     saveBooksData(books, kFeaturedBox);
     return books;
-  } catch (e) {
-    print('fetchFeaturedBook error: $e');
-    rethrow;
-  }
 }
 
   @override

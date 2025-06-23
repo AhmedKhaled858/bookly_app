@@ -28,8 +28,6 @@ class BookEntity {
     required this.title,
     required this.description,
   });
-
-
   factory BookEntity.fromJson(Map<String, dynamic> json) {
     return BookEntity(
       bookId: json['id'],
