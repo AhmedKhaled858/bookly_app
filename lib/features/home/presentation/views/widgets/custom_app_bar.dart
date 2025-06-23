@@ -13,40 +13,42 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 70, bottom: 20),
-      child: Row(
-        children: [
-          BlocBuilder<ThemeCubit, ThemeState>(
-            builder: (context, state) {
-              final isDark = state.mode == AppThemeMode.dark;
-              return IconButton(
-                onPressed: () {
-                  context.read<ThemeCubit>().toggleTheme();
-                },
-                icon: Icon(
-                  isDark ? Icons.wb_sunny_outlined : Icons.nightlight_round,
-                  color: isDark ? Colors.white : Colors.black,
-                  size: 24,
-                ),
-              );
-            },
-          ),
-          Spacer(),
-          IconButton(
-            onPressed: () {
-              GoRouter.of(context).push(AppRouter.KSearchView);
-            },
-            icon: Icon(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black,
-              FontAwesomeIcons.magnifyingGlass,
-              size: 24,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: [
+            BlocBuilder<ThemeCubit, ThemeState>(
+              builder: (context, state) {
+                final isDark = state.mode == AppThemeMode.dark;
+                return IconButton(
+                  onPressed: () {
+                    context.read<ThemeCubit>().toggleTheme();
+                  },
+                  icon: Icon(
+                    isDark ? Icons.wb_sunny_outlined : Icons.nightlight_round,
+                    color: isDark ? Colors.white : Colors.black,
+                    size: 24,
+                  ),
+                );
+              },
             ),
-          ),
-          CustomCartIcon(),
-        ],
+            Spacer(),
+            IconButton(
+              onPressed: () {
+                GoRouter.of(context).push(AppRouter.KSearchView);
+              },
+              icon: Icon(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+                FontAwesomeIcons.magnifyingGlass,
+                size: 24,
+              ),
+            ),
+            CustomCartIcon(),
+          ],
+        ),
       ),
     );
   }

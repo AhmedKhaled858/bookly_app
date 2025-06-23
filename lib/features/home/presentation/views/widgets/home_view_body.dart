@@ -5,47 +5,43 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/colors/app_color.dart';
 import 'featured_book_list_view_bloc_consumer.dart';
-
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-     final ThemeData theme = Theme.of(context);
-    final Color textColor = theme.brightness == Brightness.dark 
-        ? AppColors.darkTextColor 
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = theme.brightness == Brightness.dark
+        ? AppColors.darkTextColor
         : AppColors.lightTextColor;
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBar(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: FeaturedBookListViewBlocConsumer(),
-              ),
-              SizedBox(height: 33),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: Text(
-                  "Newest Book",
-                  style: Styles.textStyle18.copyWith(
-                    color: textColor,
-                  ),
-                ),
-              ),
 
-               Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
-                 child: NewestBookListViewBlocConsumer(),
-               ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CustomAppBar(),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: FeaturedBookListViewBlocConsumer(),
+        ),
+        const SizedBox(height: 33),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Text(
+            "Newest Book",
+            style: Styles.textStyle18.copyWith(
+              color: textColor,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        //  This makes the list scrollable inside remaining screen
+        const Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: NewestBookListViewBlocConsumer(),
           ),
         ),
       ],
     );
   }
 }
-
