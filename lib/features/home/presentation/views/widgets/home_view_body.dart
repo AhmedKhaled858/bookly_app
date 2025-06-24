@@ -15,33 +15,51 @@ class HomeViewBody extends StatelessWidget {
         ? AppColors.darkTextColor
         : AppColors.lightTextColor;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const CustomAppBar(),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: FeaturedBookListViewBlocConsumer(),
-        ),
-        const SizedBox(height: 33),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Text(
-            "Newest Book",
-            style: Styles.textStyle18.copyWith(
-              color: textColor,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomAppBar(),
+
+                /// Horizontal list of featured books
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    height: 200,
+                    child: FeaturedBookListViewBlocConsumer(),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Text(
+                    "Newest Book",
+                    style: Styles.textStyle18.copyWith(
+                      color: textColor,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                /// Expandable vertical list
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: NewestBookListViewBlocConsumer(),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        //  This makes the list scrollable inside remaining screen
-        const Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: NewestBookListViewBlocConsumer(),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
