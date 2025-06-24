@@ -39,11 +39,24 @@ class CartListView extends StatelessWidget {
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   onDismissed: (_) {
-                    cartProvider.removeFromCart(book);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${book.title} removed from cart')),
-                    );
-                  },
+                      cartProvider.removeFromCart(book);
+
+                      final removedBook = book;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${book.title} removed from cart'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            textColor: Colors.yellow,
+                            onPressed: () {
+                              cartProvider.addToCart(removedBook);
+                            },
+                          ),
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    },
                   child: Card(
                     color: Colors.white.withOpacity(0.15),
                     shape: RoundedRectangleBorder(

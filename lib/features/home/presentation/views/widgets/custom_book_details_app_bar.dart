@@ -15,7 +15,7 @@ class CustomBookDetailsAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
+          IconButton(
               onPressed: () {
                 GoRouter.of(context).go(AppRouter.KHomeView);
               },
